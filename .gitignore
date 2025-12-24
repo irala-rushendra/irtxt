@@ -1,0 +1,13 @@
+# build artifacts
+build/
+*.o
+*.out
+
+# editor junk
+*.swp
+*.swo
+*.tmp
+
+# OS
+.DS_Store
+
