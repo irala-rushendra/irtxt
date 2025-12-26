@@ -11,8 +11,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable(irtxt
     src/main.cpp
+    src/ted_buffer/gap_buffer.cpp
 )
+
+target_include_directories(irtxt PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
 install(TARGETS irtxt
         RUNTIME DESTINATION bin)
+
 
