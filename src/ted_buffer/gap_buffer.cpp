@@ -38,20 +38,50 @@ bool TextBuffer::GapBufferImpl::loadBuffer(const char *data, std::size_t length)
   return true;
 }
 // lets say editing has to done at 'some' and cursor is at 'is'
-// 
+// 1.[this is some text][   Gap   ]
+// 2.[this is some [   gap   ] text]
+// 3.[this is [   gap   ] some text]
+// mov_fwd corresponds to 3 -> 2 transition whereas mov_bwd corresponds to 1 --> 2 transition
 bool TextBuffer::GapBufferImpl::mov_fwd(std::size_t distance){
-  ;
+  while(distance--){
+    if(endOffset == capacity) return false;
+    data[startOffset] = data[endOffset];
+    endOffset++;
+    startOffset++;
+  }
+  return true;
 }
 bool TextBuffer::GapBufferImpl::mov_bwd(std::size_t distance){
-  ;
+  while(distance--){
+    if(startOffset == 0) return false;
+    endOffset--;
+    startOffset--;
+    data[endOffset] = data[startOffset];
+  }
+  return true;
 }
-
+/*
+ * The above code decreases distance by one and shifts by assigning values of the traversing side to the other side
+ * This way the entire buffer can be moved
+ */
 bool TextBuffer::GapBufferImpl::insert(const char *data, std::size_t length){
-  ;
+  // validation step
+  if(!data) return false;
+
+  // if the size of buffer is less than length it cannot accomodate the text for insertion.
+  if(endOffset - startOffset < length) return false;
+
+  while(length--){
+    data[startOffset++] = *(data++);
+  }
+  return true;
 }
 
 bool TextBuffer::GapBufferImpl::remove(std::size_t length){
-  ;
+  // if the length of deletion is greater than the starting offset that means its at the end and cannot delete anything.
+  if (length > startOffset) return false;
+  startOffset -= length;
+  return true;
 }
 
 void TextBuffer::GapBufferImpl::print(){
