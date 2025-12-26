@@ -5,6 +5,11 @@
 #include <fstream>
 #include "/ted_buffer/gap_buffer.cpp"
 
+int main(){
+  return 0;
+}
+
+/*
 FILE* open_file(std::string fname, int cnt = 0){
   if(fname == "untitled"){
     std::string new_file_name = "untitled " + cnt;
@@ -41,3 +46,4 @@ int main(int argc, char** argv){
 
   
 }
+*/

@@ -2,7 +2,7 @@
 #include "text_buffer.h"
 #include <cstdio>
 #include <unistd.h>
-#include <cstddef.h>
+#include <cstddef>
 /*Author : Irala Rushendra | email = rushendrairala@gmail.com*/
 /*
  * This Section explains implementation of gap_buffer using the text_buffer interface defined in the text_editor_ namespace in include directory
@@ -13,14 +13,9 @@
  *  
  */
 
-text_buffer::TextBuffer::GapBufferImpl() {
-  memset(this, 0 , sizeof(GapBufferImpl));
-}
-text_buffer::TextBuffer::~GapBufferImpl() {
-  if (data != nullptr){
-    delete[] data;
-    memset(this , 0, sizeof(GapBufferImpl));
-  }
+TextBuffer::GapBufferImpl::GapBufferImpl() : data(nullptr), capacity(0), startOffset(0), endOffset(0) {}
+TextBuffer::GapBufferImpl::~GapBufferImpl() {
+  delete[] data;
 }
 // eg: this is some text
 // [this is some text][      Gap      ]
@@ -28,9 +23,12 @@ bool TextBuffer::GapBufferImpl::loadBuffer(const char *data, std::size_t length)
   // If invalid data is parsed return false (validation step)
   if(!data) return false;
   if(length > 4096) return false;
+  delete[] this->data;
   // Dynamically allocate memory buffer capacity of 4096 bytes (Giant chunk of memory)
   this->data = new char[4096];
   capacity = 4096;
+
+  std::memset(this->data,0,capacity);
   //[this][    Gap    ] here starting offset would be 5 as (this - 4 + /0 - 1 = 5)
   std::memcpy(this->data,data,length);
   startOffset = length;
@@ -72,7 +70,7 @@ bool TextBuffer::GapBufferImpl::insert(const char *data, std::size_t length){
   if(endOffset - startOffset < length) return false;
 
   while(length--){
-    data[startOffset++] = *(data++);
+    this->data[startOffset++] = *data++;
   }
   return true;
 }
@@ -85,5 +83,11 @@ bool TextBuffer::GapBufferImpl::remove(std::size_t length){
 }
 
 void TextBuffer::GapBufferImpl::print(){
-  ;
+  for(std::size_t i = 0;i<startOffset;++i){
+    putchar(data[i]);
+  }
+  for(std::size_t i = endOffset;i<capacity;++i){
+    putchar(data[i]);
+  }
+  putchar('\n');
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include <cstring>
-#include <cstddef.h>
+#include <cstddef>
 namespace TextBuffer {
   class GapBufferImpl {
     private:
@@ -15,9 +15,9 @@ namespace TextBuffer {
       bool loadBuffer(const char *data, std::size_t length);
       bool insert(const char *data, std::size_t length);
       bool remove(std::size_t length);
-      void print() const;
+      void print();
       bool mov_fwd(std::size_t distance);
       bool mov_bwd(std::size_t distance);
 
-  }
+  };
 }
