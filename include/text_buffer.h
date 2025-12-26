@@ -1,21 +1,23 @@
 #pragma once
 #include <cstring>
-
-namespace text_buffer_ {
-  class TextBuffer {
-    public:
-      TextBuffer();
-      ~TextBuffer();
-      int loadBuffer(char *data, long length);
-      int move_fwd(long distance);
-      int move_bwd(long distance);
-      int insert(char *data, long length);
-      int remove(long length);
-      void printBuffer();
+#include <cstddef.h>
+namespace TextBuffer {
+  class GapBufferImpl {
     private:
       char *data;
-      long capacity;
-      long before_cursor_index;
-      long after_cursor_index;
-  };
+      std::size_t capacity;
+      std::size_t startOffset;
+      std::size_t endOffset;
+
+    public:
+      GapBufferImpl();
+      ~GapBufferImpl();
+      bool loadBuffer(const char *data, std::size_t length);
+      bool insert(const char *data, std::size_t length);
+      bool remove(std::size_t length);
+      void print() const;
+      bool mov_fwd(std::size_t distance);
+      bool mov_bwd(std::size_t distance);
+
+  }
 }
