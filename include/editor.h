@@ -19,6 +19,8 @@ namespace Core {
       void insertChar(char c);
       void insertNewLine();
       void deleteForward();
+      bool openFile(const std::string& path);
+      bool saveFile(const std::string& path) const;
   };
   
 }

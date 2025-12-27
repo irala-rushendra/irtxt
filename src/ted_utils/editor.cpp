@@ -1,7 +1,7 @@
 #include "editor.h"
 #include <string>
 #include <cctype>
-
+#include "file_io.h"
 // These are function wrappers for the editor
 void Core::EditorCore::insertText(const std::string& str){
   buffer.insert(str.c_str(),str.size());
@@ -151,3 +151,14 @@ void Core::EditorCore::deleteForward(){
   }
 }
 
+bool Core::EditorCore::openFile(const std::string& path){
+  std::string data;
+  if(!IO::loadFromFile(path, data))
+    return false;
+  buffer.loadBuffer(data.c_str(),data.size());
+  return true;
+}
+
+bool Core::EditorCore::saveFile(const std::string& path) const {
+  return IO::saveToFile(path,buffer.dump());
+}

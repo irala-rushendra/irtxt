@@ -16,13 +16,16 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
     #target_include_directories(irtxt PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
-add_executable(editor_core_test
-    tests/ed_utils_test.cpp
-    src/ted_buffer/gap_buffer.cpp
+# -------- File IO test --------
+add_executable(file_io_test
+    tests/io_test.cpp
+    src/ted_utils/file_io.cpp
     src/ted_utils/editor.cpp
+    src/ted_buffer/gap_buffer.cpp
 )
 
-target_include_directories(editor_core_test PRIVATE include)
+target_include_directories(file_io_test PRIVATE include)
+
 
 #
 #install(TARGETS irtxt
