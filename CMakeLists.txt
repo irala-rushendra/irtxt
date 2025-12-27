@@ -16,11 +16,14 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
     #target_include_directories(irtxt PRIVATE ${PROJECT_SOURCE_DIR}/include)
 
-add_executable(gapbuffer_test
-    tests/buffer_test_gap.cpp
+add_executable(editor_core_test
+    tests/ed_utils_test.cpp
     src/ted_buffer/gap_buffer.cpp
+    src/ted_utils/editor.cpp
 )
-target_include_directories(gapbuffer_test PRIVATE include)
+
+target_include_directories(editor_core_test PRIVATE include)
+
 #
 #install(TARGETS irtxt
 #       RUNTIME DESTINATION bin)

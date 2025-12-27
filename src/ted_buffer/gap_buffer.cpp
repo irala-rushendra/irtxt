@@ -1,5 +1,6 @@
 #include <cstring>
 #include "text_buffer.h"
+#include <string>
 #include <cstdio>
 #include <unistd.h>
 #include <cstddef>
@@ -82,6 +83,12 @@ bool TextBuffer::GapBufferImpl::remove(std::size_t length){
   return true;
 }
 
+bool TextBuffer::GapBufferImpl::removeForward(std::size_t length) {
+  if(length > (capacity - endOffset)) return false;
+  endOffset += length;
+  return true;
+}
+
 void TextBuffer::GapBufferImpl::print(){
   for(std::size_t i = 0;i<startOffset;++i){
     putchar(data[i]);
@@ -90,4 +97,50 @@ void TextBuffer::GapBufferImpl::print(){
     putchar(data[i]);
   }
   putchar('\n');
+}
+
+std::string TextBuffer::GapBufferImpl::dump() const {
+  std::string final_string = "";
+  for(std::size_t i = 0;i < startOffset;++i){
+    final_string += data[i];
+  }
+  for(std::size_t i = endOffset; i < capacity ; ++i){
+    final_string += data[i];
+  }
+  return final_string;
+}
+
+std::string TextBuffer::GapBufferImpl::dumpImproved() const {
+  std::string out;
+  out.reserve(startOffset + (capacity - endOffset));
+  out.append(data, startOffset);
+  out.append(data + endOffset, capacity - endOffset);
+
+  return out;
+  
+}
+
+std::size_t TextBuffer::GapBufferImpl::cursorPos() const {
+  return startOffset;
+}
+
+std::size_t TextBuffer::GapBufferImpl::textLength() const {
+  return (startOffset + (capacity - endOffset));
+}
+
+std::size_t TextBuffer::GapBufferImpl::rightTextLength() const {
+  return (capacity - endOffset);
+}
+
+char TextBuffer::GapBufferImpl::charAt(std::size_t pos) const {
+  std::size_t logicalLength = startOffset + (capacity - endOffset);
+  
+  if(pos >= logicalLength) return '\0';
+
+  if(pos < startOffset){
+    return data[pos];
+  }else{
+    return data[pos + (endOffset - startOffset)];
+  }
+
 }
