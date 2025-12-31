@@ -1,35 +1,27 @@
-#cmake_minimum_required(VERSION 3.16)
+project(ted LANGUAGES CXX)
 
-#project(irtxt
-  #VERSION 0.1.0
-    #LANGUAGES CXX
-    #)
+# ---- C++ standard ----
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-#set(CMAKE_CXX_STANDARD 20)
-#set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#set(CMAKE_CXX_EXTENSIONS OFF)
+# ---- Core library ----
+add_library(ted_core
+    src/ted_utils/editor.cpp
+    src/ted_utils/file_io.cpp
+    src/ted_buffer/gap_buffer.cpp
+)
 
-#add_executable(irtxt
-  #src/main.cpp
-    #src/ted_buffer/gap_buffer.cpp
-    #)
+target_include_directories(ted_core
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
-    #target_include_directories(irtxt PRIVATE ${PROJECT_SOURCE_DIR}/include)
-
-# -------- File IO test --------
-#add_executable(file_io_test
-#   tests/io_test.cpp
-#   src/ted_utils/file_io.cpp
-#   src/ted_utils/editor.cpp
-#   src/ted_buffer/gap_buffer.cpp
-#)
-
-#target_include_directories(file_io_test PRIVATE include)
-
-
-#
-#install(TARGETS irtxt
-#       RUNTIME DESTINATION bin)
+target_compile_options(ted_core PRIVATE
+    -Wall
+    -Wextra
+    -Wpedantic
+)
 
 cmake_minimum_required(VERSION 3.16)
 
@@ -99,4 +91,17 @@ add_test(NAME io_test COMMAND io_test)
 install(TARGETS irtxt
     RUNTIME DESTINATION bin
 )
+=======
+# ---- Main executable ----
+add_executable(ted
+    src/main.cpp
+)
+
+target_link_libraries(ted PRIVATE ted_core)
+# ---- FileIO tests ----
+add_executable(file_io_test
+    tests/file_io_test.cpp
+)
+
+target_link_libraries(file_io_test PRIVATE ted_core)
 
